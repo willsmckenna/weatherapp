@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  </head>
+  <body>
+    <section class="hero is-primary is-bold">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title has-text-centered">
+              Weather Tracker
+            </h1>
+            <h2 class="subtitle has-text-centered">
+              See the current weather of any city
+            </h2>
+          </div>
+        </div>
+    </section>
+  <section class="section">
+    <div class="container">
+      <div class="box">
+        <div class="columns">
+          <div class="column is-one-third is-offset-one-third">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="level">
+                {{form.name}}
+                <div class="buttons">
+                  <button type="submit" class="button is-info">Add City</button>
+                </div>
+              </div>
+              {% if message %}
+                <div class="notification {{message_class}}">{{message}}</div>
+              {% endif %}
+            </form>
+          <br>
+          {% for city_weather in weather_data %}
+          <div class="box">
+            <article class="media">
+              <div class="media-left">
+                <figure class="image is-50x50">
+                  <img src="http://openweathermap.org/img/w/{{city_weather.icon}}.png" alt="Image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p>
+                    <span class="title">{{city_weather.city}}</span>
+                    <br>
+                    <span class="subtitle">{{city_weather.temperature}}°</span>
+                    <br> {{city_weather.description}}
+                  </p>
+                </div>
+              </div>
+              <div class="media-right">
+                <a href="{% url 'delete_city' city_weather.city %}">
+                  <button class="delete"></button>
+                </a>
+              </div>
+            </article>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  </body>
+</html>
